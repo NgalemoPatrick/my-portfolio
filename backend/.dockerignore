@@ -1,0 +1,12 @@
+# Don't copy local dependencies, they will be installed in the container
+node_modules
+
+# Don't copy the npm debug log
+npm-debug.log
+
+# Don't copy environment files
+.env
+
+# Don't copy the Dockerfile itself or other Docker-related files
+Dockerfile
+.dockerignore
