@@ -92,13 +92,13 @@ steps:
 # This section tells Cloud Build which secrets to fetch from Secret Manager
 availableSecrets:
   secretManager:
-    - versionName: projects/$PROJECT_ID/secrets/mongodb-uri/versions/latest
+    - versionName: projects/$ortfolio-dev-462307/secrets/mongodb-uri/versions/latest
       env: "MONGODB_URI_SECRET"
-    - versionName: projects/$PROJECT_ID/secrets/email-user/versions/latest
+    - versionName: projects/$ortfolio-dev-462307/secrets/email-user/versions/latest
       env: "EMAIL_USER_SECRET"
-    - versionName: projects/$PROJECT_ID/secrets/email-pass/versions/latest
+    - versionName: projects/$ortfolio-dev-462307/secrets/email-pass/versions/latest
       env: "EMAIL_PASS_SECRET"
-    - versionName: projects/$PROJECT_ID/secrets/recipient-email/versions/latest
+    - versionName: projects/$ortfolio-dev-462307/secrets/recipient-email/versions/latest
       env: "RECIPIENT_EMAIL_SECRET"
 
 # Specify the final image pushed to Artifact Registry
