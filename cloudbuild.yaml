@@ -1,5 +1,4 @@
 # cloudbuild.yaml
-
 # Explicitly specify where to store the build logs
 options:
   logsBucket: "gs://[portfolio-dev-462307]_cloudbuild_logs"
@@ -71,6 +70,7 @@ steps:
         "--set-env-vars=EMAIL_PASS=$$EMAIL_PASS_SECRET",
         "--set-env-vars=RECIPIENT_EMAIL=$$RECIPIENT_EMAIL_SECRET",
       ]
+
     # This makes the secrets available to the gcloud command
     secretEnv:
       [
