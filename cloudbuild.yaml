@@ -1,84 +1,106 @@
 # cloudbuild.yaml
+
 steps:
   # 1. Install Frontend Dependencies & Run Tests
-  - name: 'gcr.io/cloud-builders/npm'
-    id: 'Frontend Install & Test'
-    args: ['install']
-    dir: 'frontend'
-  - name: 'gcr.io/cloud-builders/npm'
-    id: 'Frontend Test'
-    args: ['test']
-    dir: 'frontend'
+  - name: "gcr.io/cloud-builders/npm"
+    id: "Frontend Install & Test"
+    args: ["install"]
+    dir: "frontend"
+  - name: "gcr.io/cloud-builders/npm"
+    id: "Frontend Test"
+    args: ["test"]
+    dir: "frontend"
 
   # 2. Install Backend Dependencies & Run Tests
-  - name: 'gcr.io/cloud-builders/npm'
-    id: 'Backend Install & Test'
-    args: ['install']
-    dir: 'backend'
+  - name: "gcr.io/cloud-builders/npm"
+    id: "Backend Install & Test"
+    args: ["install"]
+    dir: "backend"
   # Add a step for backend tests if you have them
 
   # 3. Build Production React App
-  - name: 'gcr.io/cloud-builders/npm'
-    id: 'Build Frontend'
-    args: ['run', 'build']
-    dir: 'frontend'
+  - name: "gcr.io/cloud-builders/npm"
+    id: "Build Frontend"
+    args: ["run", "build"]
+    dir: "frontend"
 
   # 4. Build Backend Docker Image
-  - name: 'gcr.io/cloud-builders/docker'
-    id: 'Build Backend Docker Image'
-    args: [
-      'build',
-      '-t', 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA',
-      '.',
-    ]
-    dir: 'backend'
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Build Backend Docker Image"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA",
+        ".",
+      ]
+    dir: "backend"
 
   # 5. Push Backend Docker Image to Artifact Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    id: 'Push Backend Image'
-    args: ['push', 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA']
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Push Backend Image"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA",
+      ]
 
   # 6. Deploy to Cloud Run (Backend)
   # This step uses the gcloud builder to run deployment commands.
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    id: 'Deploy Backend'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "Deploy Backend"
     entrypoint: gcloud
     args: [
-      'run', 'deploy', 'portfolio-backend', # The name of your Cloud Run service
-      '--image', 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA',
-      '--region', 'us-central1',
-      '--platform', 'managed',
-      '--allow-unauthenticated', # Allows public access to your API
-      # Here you would link secrets from Secret Manager to environment variables
-      '--set-env-vars=MONGODB_URI=$$MONGODB_URI_SECRET',
-      '--set-env-vars=EMAIL_USER=$$EMAIL_USER_SECRET',
-      '--set-env-vars=EMAIL_PASS=$$EMAIL_PASS_SECRET',
-      '--set-env-vars=RECIPIENT_EMAIL=$$RECIPIENT_EMAIL_SECRET',
-    ]
+        "run",
+        "deploy",
+        "portfolio-backend", # The name of your Cloud Run service
+        "--image",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA",
+        "--region",
+        "us-central1",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated", # Allows public access to your API
+        # Here you would link secrets from Secret Manager to environment variables
+        "--set-env-vars=MONGODB_URI=$$MONGODB_URI_SECRET",
+        "--set-env-vars=EMAIL_USER=$$EMAIL_USER_SECRET",
+        "--set-env-vars=EMAIL_PASS=$$EMAIL_PASS_SECRET",
+        "--set-env-vars=RECIPIENT_EMAIL=$$RECIPIENT_EMAIL_SECRET",
+      ]
     # This makes the secrets available to the gcloud command
-    secretEnv: ['MONGODB_URI_SECRET', 'EMAIL_USER_SECRET', 'EMAIL_PASS_SECRET', 'RECIPIENT_EMAIL_SECRET']
+    secretEnv:
+      [
+        "MONGODB_URI_SECRET",
+        "EMAIL_USER_SECRET",
+        "EMAIL_PASS_SECRET",
+        "RECIPIENT_EMAIL_SECRET",
+      ]
 
   # 7. Deploy to Firebase Hosting (Frontend)
-  - name: 'gcr.io/cloud-builders/npm'
-    id: 'Install Firebase Tools'
-    args: ['install', '-g', 'firebase-tools']
-  - name: 'gcr.io/cloud-builders/firebase'
-    id: 'Deploy Frontend'
-    args: ['deploy', '--only', 'hosting', '--project', '$PROJECT_ID']
-    dir: 'frontend' # Assumes firebase.json is in this directory
+  - name: "gcr.io/cloud-builders/npm"
+    id: "Install Firebase Tools"
+    args: ["install", "-g", "firebase-tools"]
+  - name: "gcr.io/cloud-builders/firebase"
+    id: "Deploy Frontend"
+    args: ["deploy", "--only", "hosting", "--project", "$PROJECT_ID"]
+    dir: "frontend" # Assumes firebase.json is in this directory
+
+# Explicitly specify where to store the build logs.
+# Replace the bucket name if you created a different one.
+logsBucket: "gs://${PROJECT_ID}_cloudbuild_logs"
 
 # This section tells Cloud Build which secrets to fetch from Secret Manager
 availableSecrets:
   secretManager:
-  - versionName: projects/$portfolio-dev-462307/secrets/mongodb-uri/versions/latest
-    env: 'MONGODB_URI_SECRET'
-  - versionName: projects/$portfolio-dev-462307/secrets/email-user/versions/latest
-    env: 'EMAIL_USER_SECRET'
-  - versionName: projects/$portfolio-dev-462307/secrets/email-pass/versions/latest
-    env: 'EMAIL_PASS_SECRET'
-  - versionName: projects/$portfolio-dev-462307/secrets/recipient-email/versions/latest
-    env: 'RECIPIENT_EMAIL_SECRET'
+    - versionName: projects/$PROJECT_ID/secrets/mongodb-uri/versions/latest
+      env: "MONGODB_URI_SECRET"
+    - versionName: projects/$PROJECT_ID/secrets/email-user/versions/latest
+      env: "EMAIL_USER_SECRET"
+    - versionName: projects/$PROJECT_ID/secrets/email-pass/versions/latest
+      env: "EMAIL_PASS_SECRET"
+    - versionName: projects/$PROJECT_ID/secrets/recipient-email/versions/latest
+      env: "RECIPIENT_EMAIL_SECRET"
 
 # Specify the final image pushed to Artifact Registry
 images:
-- 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA'
+  - "us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA"
