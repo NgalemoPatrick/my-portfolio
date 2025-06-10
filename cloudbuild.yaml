@@ -1,4 +1,9 @@
 # cloudbuild.yaml
+
+# Explicitly specify where to store the build logs
+options:
+  logsBucket: 'gs://[portfolio-dev-462307]_cloudbuild_logs'
+
 steps:
   # 1. Install Frontend Dependencies & Run Tests
   - name: 'gcr.io/cloud-builders/npm'
@@ -28,7 +33,7 @@ steps:
     id: 'Build Backend Docker Image'
     args: [
       'build',
-      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA',
+      '-t', 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA',
       '.',
     ]
     dir: 'backend'
@@ -36,7 +41,7 @@ steps:
   # 5. Push Backend Docker Image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Push Backend Image'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA']
+    args: ['push', 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA']
 
   # 6. Deploy to Cloud Run (Backend)
   # This step uses the gcloud builder to run deployment commands.
@@ -45,7 +50,7 @@ steps:
     entrypoint: gcloud
     args: [
       'run', 'deploy', 'portfolio-backend', # The name of your Cloud Run service
-      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA',
+      '--image', 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA',
       '--region', 'us-central1',
       '--platform', 'managed',
       '--allow-unauthenticated', # Allows public access to your API
@@ -64,7 +69,7 @@ steps:
     args: ['install', '-g', 'firebase-tools']
   - name: 'gcr.io/cloud-builders/firebase'
     id: 'Deploy Frontend'
-    args: ['deploy', '--only', 'hosting', '--project', '$PROJECT_ID']
+    args: ['deploy', '--only', 'hosting', '--project', '$portfolio-dev-462307']
     dir: 'frontend' # Assumes firebase.json is in this directory
 
 # This section tells Cloud Build which secrets to fetch from Secret Manager
@@ -81,4 +86,4 @@ availableSecrets:
 
 # Specify the final image pushed to Artifact Registry
 images:
-- 'us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA'
+- 'us-central1-docker.pkg.dev/$portfolio-dev-462307/portfolio-repo/backend:$COMMIT_SHA'
