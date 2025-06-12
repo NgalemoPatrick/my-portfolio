@@ -1,9 +1,8 @@
 # cloudbuild.yaml
-
 steps:
   # 1. Install Frontend Dependencies & Run Tests
   - name: "gcr.io/cloud-builders/npm"
-    id: "Frontend Install & Test"
+    id: "Frontend Install"
     args: ["install"]
     dir: "frontend"
   - name: "gcr.io/cloud-builders/npm"
@@ -13,7 +12,7 @@ steps:
 
   # 2. Install Backend Dependencies & Run Tests
   - name: "gcr.io/cloud-builders/npm"
-    id: "Backend Install & Test"
+    id: "Backend Install"
     args: ["install"]
     dir: "backend"
   # Add a step for backend tests if you have them
@@ -46,28 +45,24 @@ steps:
       ]
 
   # 6. Deploy to Cloud Run (Backend)
-  # This step uses the gcloud builder to run deployment commands.
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     id: "Deploy Backend"
-    entrypoint: gcloud
-    args: [
+    entrypoint: "gcloud"
+    args:
+      [
         "run",
         "deploy",
-        "portfolio-backend", # The name of your Cloud Run service
+        "portfolio-backend",
         "--image",
         "us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA",
         "--region",
         "us-central1",
         "--platform",
         "managed",
-        "--allow-unauthenticated", # Allows public access to your API
-        # Here you would link secrets from Secret Manager to environment variables
-        "--set-env-vars=MONGODB_URI=$$MONGODB_URI_SECRET",
-        "--set-env-vars=EMAIL_USER=$$EMAIL_USER_SECRET",
-        "--set-env-vars=EMAIL_PASS=$$EMAIL_PASS_SECRET",
-        "--set-env-vars=RECIPIENT_EMAIL=$$RECIPIENT_EMAIL_SECRET",
+        "--allow-unauthenticated",
+        "--set-env-vars",
+        "MONGODB_URI=$$MONGODB_URI_SECRET,EMAIL_USER=$$EMAIL_USER_SECRET,EMAIL_PASS=$$EMAIL_PASS_SECRET,RECIPIENT_EMAIL=$$RECIPIENT_EMAIL_SECRET",
       ]
-    # This makes the secrets available to the gcloud command
     secretEnv:
       [
         "MONGODB_URI_SECRET",
@@ -79,15 +74,13 @@ steps:
   # 7. Deploy to Firebase Hosting (Frontend)
   - name: "gcr.io/cloud-builders/npm"
     id: "Install Firebase Tools"
+    entrypoint: "npm"
     args: ["install", "-g", "firebase-tools"]
   - name: "gcr.io/cloud-builders/firebase"
     id: "Deploy Frontend"
+    entrypoint: "firebase"
     args: ["deploy", "--only", "hosting", "--project", "$PROJECT_ID"]
-    dir: "frontend" # Assumes firebase.json is in this directory
-
-# Explicitly specify where to store the build logs.
-# Replace the bucket name if you created a different one.
-logsBucket: "gs://${PROJECT_ID}_cloudbuild_logs"
+    dir: "frontend"
 
 # This section tells Cloud Build which secrets to fetch from Secret Manager
 availableSecrets:
@@ -104,3 +97,7 @@ availableSecrets:
 # Specify the final image pushed to Artifact Registry
 images:
   - "us-central1-docker.pkg.dev/$PROJECT_ID/portfolio-repo/backend:$COMMIT_SHA"
+
+# Explicitly set the logging option to avoid permissions issues with log buckets.
+options:
+  logging: CLOUD_LOGGING_ONLY
