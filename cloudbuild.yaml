@@ -17,14 +17,13 @@ steps:
       - name: "frontend_node_modules"
         path: "/workspace/frontend/node_modules"
 
-  # 2. Install Backend Dependencies & Run Tests (with caching)
+  # 2. Install Backend Dependencies
+  # No cache needed here as node_modules are not reused in subsequent steps.
+  # The Docker build step runs its own clean npm install.
   - name: "gcr.io/cloud-builders/npm"
     id: "Backend Install"
     args: ["install"]
     dir: "backend"
-    volumes:
-      - name: "backend_node_modules"
-        path: "/workspace/backend/node_modules"
 
   # Add a step for backend tests if you have them
 
