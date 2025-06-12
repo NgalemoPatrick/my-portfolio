@@ -1,20 +1,31 @@
 # cloudbuild.yaml
 steps:
-  # 1. Install Frontend Dependencies & Run Tests
+  # 1. Install Frontend Dependencies & Run Tests (with caching)
   - name: "gcr.io/cloud-builders/npm"
     id: "Frontend Install"
     args: ["install"]
     dir: "frontend"
+    volumes:
+      - name: "frontend_node_modules"
+        path: "/workspace/frontend/node_modules"
+
   - name: "gcr.io/cloud-builders/npm"
     id: "Frontend Test"
     args: ["test"]
     dir: "frontend"
+    volumes:
+      - name: "frontend_node_modules"
+        path: "/workspace/frontend/node_modules"
 
-  # 2. Install Backend Dependencies & Run Tests
+  # 2. Install Backend Dependencies & Run Tests (with caching)
   - name: "gcr.io/cloud-builders/npm"
     id: "Backend Install"
     args: ["install"]
     dir: "backend"
+    volumes:
+      - name: "backend_node_modules"
+        path: "/workspace/backend/node_modules"
+
   # Add a step for backend tests if you have them
 
   # 3. Build Production React App
@@ -22,6 +33,9 @@ steps:
     id: "Build Frontend"
     args: ["run", "build"]
     dir: "frontend"
+    volumes:
+      - name: "frontend_node_modules"
+        path: "/workspace/frontend/node_modules"
 
   # 4. Build Backend Docker Image
   - name: "gcr.io/cloud-builders/docker"
