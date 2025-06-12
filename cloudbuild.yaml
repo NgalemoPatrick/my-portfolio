@@ -116,4 +116,4 @@ options:
   # Use CLOUD_LOGGING_ONLY to avoid log bucket permissions issues.
   logging: CLOUD_LOGGING_ONLY
   # Specify a more powerful machine type to speed up the build.
-  machineType: "E2_HIGHCPU_8"
+  #machineType: "E2_HIGHCPU_8"
