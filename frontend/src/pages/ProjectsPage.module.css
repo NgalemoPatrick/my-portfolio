@@ -1,0 +1,245 @@
+/* frontend/src/pages/ProjectsPage.module.css */
+.pageContainer {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.loadingMessage,
+.errorMessage,
+.noProjectsMessage {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #555;
+  padding: 60px 20px;
+  min-height: 300px; /* Ensure some space even with message */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorMessage {
+  color: #c0392b; /* Darker red */
+}
+
+.noProjectsMessage {
+  color: #7f8c8d; /* Greyish */
+}
+
+.pageTitle {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #2c3e50; /* Dark blue-grey */
+  text-align: center;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.pageTitleIcon {
+  color: #1abc9c; /* Teal accent */
+}
+
+.pageSubtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 50px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.projectCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.imageContainer {
+  position: relative; /* For featured badge positioning */
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden; /* Clip image to container bounds */
+}
+
+.projectImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the area, might crop */
+  transition: transform 0.4s ease;
+}
+
+.projectCard:hover .projectImage {
+  transform: scale(1.05); /* Subtle zoom on hover */
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #e74c3c; /* Red accent for featured */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.cardContent {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows content to fill card and push links to bottom */
+}
+
+.projectTitle {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.projectDates {
+  font-size: 0.9rem;
+  color: #7f8c8d; /* Muted grey */
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.contentIcon {
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.projectDescription {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 20px;
+  flex-grow: 1; /* Takes available space */
+}
+
+.technologiesContainer {
+  margin-bottom: 20px;
+}
+
+.technologiesTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.techTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.techTag {
+  background-color: #ecf0f1; /* Light grey */
+  color: #34495e; /* Dark blue-grey */
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.projectLinks {
+  margin-top: auto; /* Pushes links to the bottom of the card */
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 15px; /* Space between buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller cards/screens */
+}
+
+.linkButton {
+  padding: 10px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.linkButton:hover {
+  transform: translateY(-2px);
+}
+
+.viewProjectLink {
+  background-color: #1abc9c; /* Teal */
+  color: white;
+}
+
+.viewProjectLink:hover {
+  background-color: #16a085; /* Darker teal */
+}
+
+.sourceCodeLink {
+  background-color: #34495e; /* Dark blue-grey */
+  color: white;
+}
+
+.sourceCodeLink:hover {
+  background-color: #2c3e50; /* Slightly darker */
+}
+
+/* Responsive adjustments for smaller screens if needed */
+@media (max-width: 480px) {
+  .projectsGrid {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+    gap: 20px;
+  }
+
+  .pageTitle {
+    font-size: 2.2rem;
+  }
+
+  .pageSubtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .projectTitle {
+    font-size: 1.5rem;
+  }
+
+  .linkButton {
+    width: 100%; /* Make buttons full width on small screens for better tap targets */
+    justify-content: center;
+  }
+}

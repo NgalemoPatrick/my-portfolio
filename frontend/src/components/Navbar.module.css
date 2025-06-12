@@ -1,0 +1,159 @@
+/* frontend/src/components/Navbar.module.css */
+.navbar {
+  background: linear-gradient(
+    90deg,
+    #2c3e50,
+    #34495e
+  ); /* Dark sophisticated gradient */
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  padding: 0 20px; /* Add some horizontal padding */
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 1200px; /* Max width for content */
+  margin: 0 auto; /* Center content */
+}
+
+.navLogo {
+  color: #ecf0f1; /* Light grey/white */
+  justify-self: start;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navLogo:hover {
+  color: #1abc9c; /* Teal accent on hover */
+}
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+}
+
+.navItem {
+  height: 80px;
+  display: flex; /* Ensure items align correctly and fill height */
+  align-items: center; /* Vertically center nav links */
+}
+
+.navLink {
+  color: #bdc3c7; /* Lighter grey for links */
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem; /* Increased padding for better spacing */
+  height: 100%;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  border-bottom: 3px solid transparent; /* For active state indicator */
+  font-weight: 500;
+}
+
+.navLink:hover {
+  color: #ecf0f1; /* Whiter on hover */
+  border-bottom-color: #16a085; /* Slightly darker teal for hover underline */
+}
+
+.navLink.active {
+  color: #1abc9c; /* Teal for active link text */
+  border-bottom-color: #1abc9c; /* Teal underline for active state */
+}
+
+.menuIcon {
+  display: none; /* Hidden on larger screens */
+  cursor: pointer;
+  padding: 10px; /* Easier to tap */
+}
+
+.iconBar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #ecf0f1;
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+/* Mobile menu styles */
+@media screen and (max-width: 960px) {
+  .navMenu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 80px); /* Full height minus navbar height */
+    position: absolute;
+    top: 80px; /* Position below navbar */
+    left: -100%; /* Hidden off-screen */
+    opacity: 0;
+    transition: all 0.4s ease;
+    background-color: #2c3e50; /* Match navbar background */
+    padding-top: 20px; /* Space at the top */
+  }
+
+  .navMenu.navMenuActive {
+    left: 0;
+    opacity: 1;
+    transition: all 0.4s ease;
+    z-index: 100;
+  }
+
+  .navItem {
+    width: 100%;
+    height: auto; /* Adjust height for column layout */
+  }
+
+  .navLink {
+    text-align: center;
+    padding: 1.5rem; /* Larger tap targets */
+    width: 100%;
+    display: table; /* Ensures consistent width and centering */
+    border-bottom: none; /* Remove bottom border for mobile view */
+  }
+
+  .navLink:hover {
+    background-color: #34495e; /* Slightly lighter background on hover */
+    color: #1abc9c;
+    border-bottom: none;
+  }
+
+  .navLink.active {
+    background-color: #1abc9c; /* Active background for mobile */
+    color: #2c3e50; /* Dark text on active background */
+    border-bottom: none;
+  }
+
+  .menuIcon {
+    display: block; /* Show hamburger icon */
+  }
+
+  /* Hamburger to X animation */
+  .iconBarOpen1 {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .iconBarOpen2 {
+    opacity: 0;
+  }
+  .iconBarOpen3 {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}

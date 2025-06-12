@@ -1,0 +1,272 @@
+/* frontend/src/pages/ResumePage.module.css */
+.pageContainer {
+  max-width: 900px; /* Slightly narrower for typical resume content */
+  margin: 40px auto;
+  padding: 20px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: #f8f9fa; /* Light grey background */
+}
+
+.loadingMessage,
+.errorMessage,
+.noContentMessage {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #555;
+  padding: 50px 20px;
+  min-height: 200px;
+}
+
+.errorMessage {
+  color: #c0392b;
+}
+
+.pageTitle {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #2c3e50; /* Dark blue-grey */
+  text-align: center;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.pageTitleIcon {
+  color: #2980b9; /* Professional blue */
+}
+
+.pageSubtitle {
+  text-align: center;
+  font-size: 1.15rem;
+  color: #555;
+  margin-bottom: 40px;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.resumeSection {
+  margin-bottom: 40px;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #34495e; /* Darker shade for titles */
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #2980b9; /* Blue accent */
+  display: flex;
+  align-items: center;
+}
+
+.sectionTitleIcon {
+  margin-right: 12px;
+  color: #2980b9; /* Match border color */
+}
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Space between items in a section */
+}
+
+.resumeItemCard {
+  padding: 20px;
+  border-left: 4px solid #3498db; /* Blue accent on the left */
+  background-color: #fdfdfd; /* Slightly off-white card background */
+  border-radius: 0 6px 6px 0; /* Rounded corners except left */
+  transition: box-shadow 0.3s ease;
+}
+
+.resumeItemCard:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.itemHeader {
+  display: flex;
+  flex-direction: column; /* Stack title and dates on small screens */
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.itemTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5px; /* Space below title if dates wrap */
+}
+
+.itemDates {
+  font-size: 0.95rem;
+  color: #555;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+}
+
+.itemOrganization {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #3498db; /* Blue for organization name */
+  margin-bottom: 5px;
+}
+
+.itemLocation {
+  font-size: 0.9rem;
+  color: #7f8c8d; /* Muted grey */
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.itemDetailIcon {
+  margin-right: 6px;
+  opacity: 0.8;
+}
+
+.itemDescription {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a4a4a;
+  margin-bottom: 10px;
+  white-space: pre-line;
+}
+
+.itemDetailsList {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 0;
+  margin-left: 5px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.itemDetailPoint {
+  padding-left: 20px; /* Space for custom bullet */
+  position: relative;
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.itemDetailPoint::before {
+  content: "•"; /* Custom bullet */
+  color: #3498db; /* Blue bullet */
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.certificateLink {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #2980b9;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.certificateLink:hover {
+  text-decoration: underline;
+  color: #1f638b;
+}
+
+.itemGpa {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Skills Section Specific Styling */
+.skillsGrid {
+  display: flex; /* Changed from grid for more flowing tags */
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skillItem {
+  background-color: #eaf0f6; /* Light blue-grey */
+  color: #34495e;
+  padding: 8px 15px;
+  border-radius: 20px; /* Pill shape */
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.skillItem:hover {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
+.skillName {
+  /* Styles applied directly in .skillItem */
+}
+
+.skillLevel {
+  font-size: 0.8rem;
+  margin-left: 8px;
+  color: #7f8c8d; /* Original level color for contrast */
+  font-style: italic;
+}
+.skillItem:hover .skillLevel {
+  color: #e0e0e0; /* Lighter level color on hover */
+}
+
+/* Download Section */
+.downloadSection {
+  margin-top: 50px;
+  text-align: center;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+.downloadButton {
+  background-color: #27ae60; /* Green for download */
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.downloadButton:hover {
+  background-color: #229954; /* Darker green */
+  transform: translateY(-2px);
+}
+
+.downloadNote {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Responsive adjustments */
+@media (min-width: 600px) {
+  .itemHeader {
+    flex-direction: row; /* Title and dates side-by-side */
+    align-items: center; /* Align items vertically */
+  }
+  .itemTitle {
+    margin-bottom: 0; /* Remove bottom margin when side-by-side */
+  }
+}
